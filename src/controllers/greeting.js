@@ -1,9 +1,13 @@
 const otherValue = "1234";
-const handleGreeting = ({params}, response) => {
+const handleGreeting = ({params, country}, response) => {
     if(!params.name){
         response.send("Hello World!");
     } else {
-        const message = "Hello " + params.name;
+        let message = "Hello " + params.name;
+
+        if(country === "Romania") {
+            message = "Salut " + params.name;
+        }
         response.send(message);
     }
 }

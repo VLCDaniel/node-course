@@ -1,20 +1,22 @@
 const express = require('express');
-const { handleGreeting, otherValue } = require('./greeting');
-const handleElephantAPIRequest = require('./elephantAPI');
+const bodyParser = require('body-parser');
+
+// const handleElephantAPIRequest = require('./elephantAPI');
+const { handleGreeting, otherValue } = require('./controllers/greeting');
+const { port } = require('./config/express');
+const authorizationMiddleware = require('./middlewares/authorization');
+const loginHandler = require('./controllers/login');
 
 const app = express();
-const port = 3000;
+app.use(bodyParser.json());
 
-app.get("/", (request, response) => {
-    response.send("Hello World!");
-});
+app.post("/login", loginHandler);
 
-app.get("/hello/:name?", (request, response) => {
-    handleGreeting(request, response);
-    console.log(otherValue);
-});
+app.get("/hello", authorizationMiddleware, handleGreeting);
 
-app.get("/elephant", handleElephantAPIRequest);
+app.get("/hello/:name?", authorizationMiddleware, handleGreeting);
+
+// app.get("/elephant", handleElephantAPIRequest);
 
 app.listen(port, () => {
     console.log("Server started on", port);
