@@ -8,7 +8,7 @@ const loginHandler = (req, res) => {
     const password = body.password;
 
     if(findUser(username, password)){
-        const token = jwt.sign({}, MY_SECRET_KEY)
+        const token = jwt.sign({username}, MY_SECRET_KEY);
         res.send({
             token,
         });
